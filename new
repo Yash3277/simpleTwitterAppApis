@@ -1,0 +1,19 @@
+  const tweetIdList = await db.all(api6Query)
+  let idList = []
+  for (let item of tweetIdList) {
+    idList.push(item.ids)
+  }
+  let tid = tweetId
+  console.log(idList)
+  if (idList.includes(tid)) {
+    const query1 = `SELECT 
+    tweet,
+    COUNT(like_id) AS likes,
+    COUNT(reply_id) AS replies,
+    date_time AS dateTime FROM tweet NATURAL JOIN like NATURAL JOIN reply 
+    WHERE tweet_id=${tweetId};`
+    const tweetList = await db.all(query1)
+    response.send(tweetList)
+  } else {
+    response.status(401).send('Invalid Request')
+  }
